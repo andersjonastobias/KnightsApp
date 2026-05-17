@@ -23,8 +23,9 @@ jobs:
       - name: Publish
         run: dotnet publish KnightsApp/KnightsApp.csproj -c Release -o publish
 
-      - name: Fix base path and add 404.html
+      - name: Fix base href and copy 404.html
         run: |
+          sed -i 's|<base href="/" />|<base href="/KnightsApp/" />|g' publish/wwwroot/index.html
           cp publish/wwwroot/index.html publish/wwwroot/404.html
 
       - name: Deploy to gh-pages
