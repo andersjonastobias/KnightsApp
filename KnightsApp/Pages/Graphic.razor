@@ -1,0 +1,34 @@
+﻿@page "/graphic"
+
+@inject IJSRuntime JS
+
+<h3>Graphic</h3>
+
+<canvas id="bitmapCanvas"
+        width="@CanvasWidth"
+        height="@CanvasHeight"
+        style="border:1px solid black">
+</canvas>
+
+@code {
+
+    private const int GridSize = 20;
+    private const int CellSize = 20;
+
+    private int CanvasWidth => GridSize * CellSize;
+    private int CanvasHeight => GridSize * CellSize;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            int[] pixels = BitmapRenderer.Generate(GridSize, CellSize);
+            await JS.InvokeVoidAsync(
+                "graphic.renderBitmap",
+                "bitmapCanvas",
+                CanvasWidth,
+                CanvasHeight,
+                pixels);
+        }
+    }
+}
